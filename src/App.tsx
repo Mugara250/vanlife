@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import About from "./About";
 import Home from "./Home";
 import Vans from "./Vans";
+import "../server";
 function App() {
   return (
     <div className="w-[40%] mx-auto">
