@@ -31,7 +31,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/vans" element={<Vans />} />
         <Route path="/vans/:id" element={<VanDetails />} />
-      </Routes>
+      </Routes >
       <footer className="bg-[#252525] text-[#AAAAAA] text-center py-5">
         &copy; 2022 #VANLIFE
       </footer>
