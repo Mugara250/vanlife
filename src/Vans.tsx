@@ -13,7 +13,8 @@ const Vans = () => {
   useEffect(() => {
     fetch("/api/vans")
       .then((res) => res.json())
-      .then((data) => setVans(data.vans));
+      .then((data) => setVans(data.vans))
+      .catch(err => console.log(err))
   }, []);
   console.log(vans);
   return (
@@ -30,16 +31,19 @@ const Vans = () => {
         </div>
       </div>
       <div id="vans" className="mt-10 grid grid-cols-2 gap-x-10 gap-y-5">
-        {vans.map(({ id, name, price, imageUrl, type }) => (
-          <VanDetails
-            key={id}
-            id={id}
-            name={name}
-            price={price}
-            imageUrl={imageUrl}
-            type={type}
-          />
-        ))}
+        {vans !== null && vans.map(({ id, name, price, imageUrl, type }) => {
+          console.log(id);
+          return (
+            <VanDetails
+              key={id}
+              id={id}
+              name={name}
+              price={price}
+              imageUrl={imageUrl}
+              type={type}
+            />
+          )
+        })}
       </div>
     </div>
   );
