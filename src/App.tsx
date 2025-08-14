@@ -2,8 +2,8 @@ import { Routes, Route, Link } from "react-router-dom";
 import About from "./About";
 import Home from "./Home";
 import Vans from "./Vans";
-import VanDetails from "./VanDetails";
 import "../server";
+import VanDetails from "./VanDetails";
 function App() {
   return (
     <div className="w-[40%] mx-auto">
@@ -29,13 +29,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/vans" element={<Vans />}></Route>
-        <Route path="/vans/:id" element={< VanDetails />}></Route>
+        <Route path="/vans" element={<Vans />} />
+        <Route path="/vans/:id" element={<VanDetails />} />
       </Routes>
       <footer className="bg-[#252525] text-[#AAAAAA] text-center py-5">
         &copy; 2022 #VANLIFE
       </footer>
-    </div >
+    </div>
   );
 }
 

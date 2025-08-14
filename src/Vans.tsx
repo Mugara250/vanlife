@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 interface Van {
   id: string;
   name: string;
@@ -14,7 +15,7 @@ const Vans = () => {
     fetch("/api/vans")
       .then((res) => res.json())
       .then((data) => setVans(data.vans))
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err));
   }, []);
   console.log(vans);
   return (
@@ -31,19 +32,20 @@ const Vans = () => {
         </div>
       </div>
       <div id="vans" className="mt-10 grid grid-cols-2 gap-x-10 gap-y-5">
-        {vans !== null && vans.map(({ id, name, price, imageUrl, type }) => {
-          console.log(id);
-          return (
-            <VanDetails
-              key={id}
-              id={id}
-              name={name}
-              price={price}
-              imageUrl={imageUrl}
-              type={type}
-            />
-          )
-        })}
+        {vans !== null &&
+          vans.map(({ id, name, price, imageUrl, type }) => {
+            console.log(id);
+            return (
+              <VanDetails
+                key={id}
+                id={id}
+                name={name}
+                price={price}
+                imageUrl={imageUrl}
+                type={type}
+              />
+            );
+          })}
       </div>
     </div>
   );
@@ -53,27 +55,26 @@ export default Vans;
 
 const VanDetails = ({ id, name, price, imageUrl, type }: Van) => {
   const typeColors: Record<string, string> = {
-    "simple": "bg-[#E17654]",
-    "rugged": "bg-[#115E59]",
-  }
+    simple: "bg-[#E17654]",
+    rugged: "bg-[#115E59]",
+  };
   return (
-    <div id={id}>
+    <Link to={`/vans/${id}`} aria-label={`View details for ${name} priced at $${price} per day`}>
       <div className="">
-        <img src={imageUrl} alt={name} className="rounded-xl" />
+        <img src={imageUrl} alt={`Image of ${name}`} className="rounded-xl" />
       </div>
-      <div className="font-semibold text-[20px] flex justify-between mt-3">
+      <div className="font-semibold text-[20px] flex justify-between mt-3 mb-2">
         <h1>{name}</h1>
         <div>${price}/day</div>
       </div>
-      <button
-        type="button"
+      <span
         className={clsx(
-          "py-1 px-4 text-white rounded-lg mt-2",
-          typeColors[type] || "bg-[#161616]"
+          "py-1.5 px-4 text-white rounded-lg",
+          typeColors[type] || "bg-[#161616]",
         )}
       >
         {type}
-      </button>
-    </div >
+      </span>
+    </Link>
   );
 };
