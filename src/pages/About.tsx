@@ -1,4 +1,4 @@
-import MyVan from "./assets/campvancropped.png";
+import MyVan from "../assets/campvancropped.png";
 const About = () => {
   return (
     <div className="bg-[#FFF7ED]">

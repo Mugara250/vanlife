@@ -17,7 +17,6 @@ const Vans = () => {
       .then((data) => setVans(data.vans))
       .catch((err) => console.log(err));
   }, []);
-  console.log(vans);
   return (
     <div className="bg-[#FFF7ED] py-10 px-6">
       <h1 className="font-bold text-[32px]">Explore our van options</h1>

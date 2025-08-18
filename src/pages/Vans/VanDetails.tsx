@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import "../server";
+import "../../../server.js";
 
 interface Van {
   id: string;
@@ -46,7 +46,7 @@ const VanDetails = () => {
       <span
         className={clsx(
           "py-1.5 px-4 text-white rounded-lg",
-          typeColors[details.type] || "bg-[#161616]"
+          typeColors[details.type] || "bg-[#161616]",
         )}
       >
         {details.type}
@@ -66,4 +66,3 @@ const VanDetails = () => {
 };
 
 export default VanDetails;
-
