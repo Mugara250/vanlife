@@ -32,6 +32,16 @@ const HostLayout = () => {
               ? "font-bold underline text-[#161616]"
               : "font-medium text-[#4D4D4D] text-lg hover:font-bold hover:underline hover:text-[#161616]"
           }
+          to="/host/vans"
+        >
+          Vans
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "font-bold underline text-[#161616]"
+              : "font-medium text-[#4D4D4D] text-lg hover:font-bold hover:underline hover:text-[#161616]"
+          }
           end
           to="/host/reviews"
         >
