@@ -10,6 +10,11 @@ import Income from "./pages/Hosts/Income/Income.tsx";
 import Reviews from "./pages/Hosts/Reviews/Reviews.tsx";
 import HostLayout from "./components/HostLayout.tsx";
 import { useEffect, useState } from "react";
+import HostVans from "./pages/Hosts/HostVans/HostVans.tsx";
+import HostVanDetailsLayout from "./components/HostVanDetailsLayout.tsx";
+import Details from "./pages/Hosts/HostVans/Details/Details.tsx";
+import Pricing from "./pages/Hosts/HostVans/Pricing/Pricing.tsx";
+import Photos from "./pages/Hosts/HostVans/Photos/Photos.tsx";
 
 interface Van {
   id: string;
@@ -27,7 +32,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => setVans(data.vans))
       .catch((err) => console.log(err));
-  }, [])
+  }, []);
   return (
     <div className="w-[40%] mx-auto">
       <Routes>
@@ -39,6 +44,12 @@ function App() {
           <Route path="host" element={<HostLayout />}>
             <Route index element={<Dashboard vans={vans} />} />
             <Route path="income" element={<Income />} />
+            <Route path="vans" element={<HostVans vans={vans} />} />
+            <Route path="vans/:id" element={<HostVanDetailsLayout vans={vans} />}>
+              <Route index element={<Details vans={vans} />} />
+              <Route path="pricing" element={<Pricing vans={vans} />} />
+              <Route path="photos" element={<Photos vans={vans} />} />
+            </Route>
             <Route path="reviews" element={<Reviews />} />
           </Route>
         </Route>
