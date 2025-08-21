@@ -1,7 +1,5 @@
-import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useOutletContext, useParams } from "react-router-dom";
 import clsx from "clsx";
-import "../../../server.js";
 
 interface Van {
   id: string;
@@ -12,16 +10,14 @@ interface Van {
   type: string;
 }
 
-const VanDetails = () => {
-  const params = useParams<{ id: string }>();
-  const [details, setDetails] = useState<Van | null>(null);
+interface Props {
+  vans: Van[];
+}
 
-  useEffect(() => {
-    if (!params.id) return;
-    fetch(`/api/vans/${params.id}`)
-      .then((response) => response.json())
-      .then((data) => setDetails(data.vans));
-  }, [params.id]);
+const VanDetails = () => {
+  const { id: param } = useParams<{ id: string }>();
+  const { vans } = useOutletContext<Props>();
+  const details = vans.filter(({ id }) => id === param)[0];
 
   const typeColors: Record<string, string> = {
     simple: "bg-[#E17654]",
@@ -29,12 +25,10 @@ const VanDetails = () => {
     luxury: "bg-[#F6C90E]",
   };
 
-  if (!details) return <p>Loading van details...</p>;
-
   return (
     <div className="bg-[#FFF7ED] px-8 pt-7 pb-16">
-      <Link to="/vans" className="hover:underline">
-        Back to all vans
+      <Link to=".." relative="path" className="hover:underline">
+        &larr; Back to all vans
       </Link>
       <div className="mt-8 mb-12">
         <img
@@ -46,7 +40,7 @@ const VanDetails = () => {
       <span
         className={clsx(
           "py-1.5 px-4 text-white rounded-lg",
-          typeColors[details.type] || "bg-[#161616]",
+          typeColors[details.type] || "bg-[#161616]"
         )}
       >
         {details.type}

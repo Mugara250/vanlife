@@ -1,22 +1,19 @@
-import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 interface Van {
   id: string;
   name: string;
   price: number;
-  // description: string;
+  description?: string;
   imageUrl: string;
   type: string;
 }
+
+interface Props {
+  vans: Van[];
+}
 const Vans = () => {
-  const [vans, setVans] = useState<Van[]>([]);
-  useEffect(() => {
-    fetch("/api/vans")
-      .then((res) => res.json())
-      .then((data) => setVans(data.vans))
-      .catch((err) => console.log(err));
-  }, []);
+const { vans } = useOutletContext<Props>();
   return (
     <div className="bg-[#FFF7ED] py-10 px-6">
       <h1 className="font-bold text-[32px]">Explore our van options</h1>
@@ -31,20 +28,18 @@ const Vans = () => {
         </div>
       </div>
       <div id="vans" className="mt-10 grid grid-cols-2 gap-x-10 gap-y-5">
-        {vans !== null &&
-          vans.map(({ id, name, price, imageUrl, type }) => {
-            console.log(id);
-            return (
-              <VanDetails
-                key={id}
-                id={id}
-                name={name}
-                price={price}
-                imageUrl={imageUrl}
-                type={type}
-              />
-            );
-          })}
+        {vans.map(({ id, name, price, imageUrl, type }) => {
+          return (
+            <VanDetails
+              key={id}
+              id={id}
+              name={name}
+              price={price}
+              imageUrl={imageUrl}
+              type={type}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -58,7 +53,10 @@ const VanDetails = ({ id, name, price, imageUrl, type }: Van) => {
     rugged: "bg-[#115E59]",
   };
   return (
-    <Link to={`/vans/${id}`} aria-label={`View details for ${name} priced at $${price} per day`}>
+    <Link
+      to={`/vans/${id}`}
+      aria-label={`View details for ${name} priced at $${price} per day`}
+    >
       <div className="">
         <img src={imageUrl} alt={`Image of ${name}`} className="rounded-xl" />
       </div>
@@ -69,7 +67,7 @@ const VanDetails = ({ id, name, price, imageUrl, type }: Van) => {
       <span
         className={clsx(
           "py-1.5 px-4 text-white rounded-lg",
-          typeColors[type] || "bg-[#161616]",
+          typeColors[type] || "bg-[#161616]"
         )}
       >
         {type}

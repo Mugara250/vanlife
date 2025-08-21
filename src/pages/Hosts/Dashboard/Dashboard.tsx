@@ -1,3 +1,5 @@
+import { useOutletContext } from "react-router-dom";
+
 interface Van {
   id: string;
   name: string;
@@ -9,7 +11,8 @@ interface Van {
 interface Props {
   vans: Van[];
 }
-const Dashboard = ({ vans }: Props) => {
+const Dashboard = () => {
+  const {vans} = useOutletContext<Props>();
   return (
     <>
       <div className="bg-[#FFEAD0] px-6 py-5">
@@ -37,7 +40,7 @@ const Dashboard = ({ vans }: Props) => {
           <h1 className="text-2xl font-bold">Your listed vans</h1>
           <h1 className="text-base">View all</h1>
         </div>
-        {vans.filter((van) => van.price > 65).map((van) => (
+        {vans.filter(({id}) => +id < 4).map((van) => (
           <div className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg">
             <div className="flex gap-x-4">
               <img

@@ -1,6 +1,17 @@
-import { NavLink, Outlet } from "react-router-dom";
-
+import { NavLink, Outlet, useOutletContext } from "react-router-dom";
+interface Van {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  imageUrl: string;
+  type: string;
+}
+interface Props {
+  vans: Van[];
+}
 const HostLayout = () => {
+  const {vans} = useOutletContext<Props>();
   return (
     <>
       <nav className="py-6 px-6 bg-[#FFF7ED] flex gap-x-6">
@@ -11,7 +22,7 @@ const HostLayout = () => {
               : "font-medium text-[#4D4D4D] text-lg hover:font-bold hover:underline hover:text-[#161616]"
           }
           end
-          to="/host"
+          to="."
         >
           Dashboard
         </NavLink>
@@ -22,7 +33,7 @@ const HostLayout = () => {
               : "font-medium text-[#4D4D4D] text-lg hover:font-bold hover:underline hover:text-[#161616]"
           }
           end
-          to="/host/income"
+          to="income"
         >
           Income
         </NavLink>
@@ -32,7 +43,7 @@ const HostLayout = () => {
               ? "font-bold underline text-[#161616]"
               : "font-medium text-[#4D4D4D] text-lg hover:font-bold hover:underline hover:text-[#161616]"
           }
-          to="/host/vans"
+          to="vans"
         >
           Vans
         </NavLink>
@@ -43,12 +54,12 @@ const HostLayout = () => {
               : "font-medium text-[#4D4D4D] text-lg hover:font-bold hover:underline hover:text-[#161616]"
           }
           end
-          to="/host/reviews"
+          to="reviews"
         >
           Reviews
         </NavLink>
       </nav>
-      <Outlet />
+      <Outlet context={{vans}}/>
     </>
   );
 };

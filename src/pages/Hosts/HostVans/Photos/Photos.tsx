@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 interface Van {
   id: string;
@@ -10,14 +10,13 @@ interface Van {
 }
 
 interface Props {
-  vans: Van[];
+  currentVan: Van[];
 }
-const Photos = ({ vans }: Props) => {
-  const {id: param} = useParams();
+const Photos = () => {
+  const { currentVan } = useOutletContext<Props>();
   return (
     <>
-      {vans
-        .filter(({ id }) => id === param)
+      {currentVan
         .map(({ imageUrl, name }) => (
           <div className="w-[103px] h-[101.55511474609375px]">
             <img src={imageUrl} alt={`Image of ${name}`} />

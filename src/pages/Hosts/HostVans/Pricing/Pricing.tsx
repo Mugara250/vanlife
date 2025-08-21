@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 interface Van {
   id: string;
@@ -10,17 +10,17 @@ interface Van {
 }
 
 interface Props {
-  vans: Van[];
+  currentVan: Van[];
 }
 
-const Pricing = ({ vans }: Props) => {
-  const {id: param} = useParams();
+const Pricing = () => {
+  const { currentVan } = useOutletContext<Props>();
+  console.log(currentVan);
   return (
     <>
-      {vans
-        .filter(({id}) => id === param)
-        .map(({price}) => (
-          <div className="text-[24px] font-medium">
+      {currentVan
+        .map(({id, price}) => (
+          <div key={id} className="text-[24px] font-medium">
             <h1>
               ${price}.00<span className="text-[16px] text-[#4D4D4D]">/day</span>
             </h1>

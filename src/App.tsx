@@ -31,24 +31,25 @@ function App() {
     fetch("/api/vans")
       .then((res) => res.json())
       .then((data) => setVans(data.vans))
+      .then((err) => console.log(err))
       .catch((err) => console.log(err));
   }, []);
   return (
     <div className="w-[40%] mx-auto">
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout vans={vans} />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="vans" element={<Vans />} />
           <Route path="vans/:id" element={<VanDetails />} />
           <Route path="host" element={<HostLayout />}>
-            <Route index element={<Dashboard vans={vans} />} />
+            <Route index element={<Dashboard />} />
             <Route path="income" element={<Income />} />
-            <Route path="vans" element={<HostVans vans={vans} />} />
-            <Route path="vans/:id" element={<HostVanDetailsLayout vans={vans} />}>
-              <Route index element={<Details vans={vans} />} />
-              <Route path="pricing" element={<Pricing vans={vans} />} />
-              <Route path="photos" element={<Photos vans={vans} />} />
+            <Route path="vans" element={<HostVans />} />
+            <Route path="vans/:id" element={<HostVanDetailsLayout />}>
+              <Route index element={<Details />} />
+              <Route path="pricing" element={<Pricing />} />
+              <Route path="photos" element={<Photos />} />
             </Route>
             <Route path="reviews" element={<Reviews />} />
           </Route>

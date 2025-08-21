@@ -14,7 +14,7 @@ const Header = () => {
                 ? "font-bold underline text-[#161616]"
                 : "text-[#4D4D4D] font-semibold hover:font-bold hover:text-black hover:underline"
             }
-            to="/host"
+            to="host"
           >
             Host
           </NavLink>
@@ -24,7 +24,7 @@ const Header = () => {
                 ? "font-bold underline text-[#161616]"
                 : "text-[#4D4D4D] font-semibold hover:font-bold hover:text-black hover:underline"
             }
-            to="/about"
+            to="about"
           >
             About
           </NavLink>
@@ -34,7 +34,7 @@ const Header = () => {
                 ? "font-bold underline text-[#161616]"
                 : "text-[#4D4D4D] font-semibold hover:font-bold hover:text-black hover:underline"
             }
-            to="/vans"
+            to="vans"
           >
             Vans
           </NavLink>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 interface Van {
   id: string;
@@ -13,12 +13,13 @@ interface Props {
   vans: Van[];
 }
 
-const HostVans = ({ vans }: Props) => {
+const HostVans = () => {
+  const {vans} = useOutletContext<Props>();
   return (
     <div className="bg-[#FFF7ED] px-6 pt-4 pb-10">
       <h1 className="text-[32px] font-bold">Your listed vans</h1>
       {vans
-        .filter(({price}) => price > 65)
+        .filter(({id}) => +id < 4)
         .map(({id, imageUrl, name, price}) => (
           <Link key={id} to={`/host/vans/${id}`}>
             <div className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg">

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 interface Van {
   id: string;
@@ -10,14 +10,13 @@ interface Van {
 }
 
 interface Props {
-  vans: Van[];
+  currentVan: Van[];
 }
-const Details = ({ vans }: Props) => {
-  const {id: param} = useParams();
+const Details = () => {
+  const { currentVan } = useOutletContext<Props>();
   return (
     <>
-      {vans
-        .filter(({id}) => id === param)
+      {currentVan
         .map(({name, type, description}) => (
           <div className="text-[14.35px] font-medium flex flex-col gap-y-4">
             <h1>
