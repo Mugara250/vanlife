@@ -26,7 +26,8 @@ const HostVanDetailsLayout = () => {
   return (
     <div className="bg-[#FFF7ED] px-6 py-10">
       <Link
-        to="/vans"
+        to=".."
+        relative="path"
         className="text-base text-[#4D4D4D] font-medium hover:text-[#201F1D] hover:underline"
       >
         &larr; Back to all vans

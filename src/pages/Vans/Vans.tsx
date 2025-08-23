@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { Link, useOutletContext, useSearchParams } from "react-router-dom";
+import { getVans } from "../../../api";
+import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 interface Van {
   id: string;
   name: string;
@@ -9,24 +10,13 @@ interface Van {
   type: string;
 }
 
-interface Vans {
-  vans: Van[];
+export const loader = () => {
+  return getVans();
 }
 
-interface Error {
-  message: string,
-  statusText: string,
-  status: number
-}
-
-interface Props {
-  loading: boolean;
-  error: Error | null; 
-}
-
-const Vans = ({loading, error}: Props) => {
-  const { vans } = useOutletContext<Vans>();
+const Vans = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const vans = useLoaderData<Van[]>();
   const typeFilter = searchParams.get("type");
   const displayedVans = typeFilter
     ? vans.filter(({ type }) => type === typeFilter)
@@ -52,8 +42,7 @@ const Vans = ({loading, error}: Props) => {
   //     return prevParams;
   //   });
   // }
-  if (loading) return <h1 className="bg-[#FFF7ED] px-6 font-bold text-[32px]" >Loading...</h1>
-  if (error) return <h1 className="bg-[#FFF7ED] px-6 font-bold text-[32px]" >There was an error: {error.message}</h1>
+  
   return (
     <div className="bg-[#FFF7ED] py-10 px-6">
       <h1 className="font-bold text-[32px]">Explore our van options</h1>
@@ -82,12 +71,15 @@ const Vans = ({loading, error}: Props) => {
         >
           Rugged
         </Link>
-        <Link
-          to={generateNewSearchParams("type", null)}
-          className="py-1.5 px-3 hover:underline"
-        >
-          Clear filters
-        </Link>
+        {typeFilter && (
+          <Link
+            to={generateNewSearchParams("type", null)}
+            className="py-1.5 px-3 hover:underline"
+          >
+            Clear filters
+          </Link>
+        )}
+
         {/* <button
           onClick={() => handleFilterChange("type", "simple")}
           className={`${
@@ -127,7 +119,7 @@ const Vans = ({loading, error}: Props) => {
             <Link
               key={id}
               to={`${id}`}
-              state={{ search: `?${searchParams.toString()}`}}
+              state={{ search: `?${searchParams.toString()}` }}
               aria-label={`View details for ${name} priced at $${price} per day`}
             >
               <div className="">
