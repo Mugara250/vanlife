@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 interface Van {
   id: string;
   name: string;
@@ -9,35 +9,147 @@ interface Van {
   type: string;
 }
 
-interface Props {
+interface Vans {
   vans: Van[];
 }
-const Vans = () => {
-const { vans } = useOutletContext<Props>();
+
+interface Error {
+  message: string,
+  statusText: string,
+  status: number
+}
+
+interface Props {
+  loading: boolean;
+  error: Error | null; 
+}
+
+const Vans = ({loading, error}: Props) => {
+  const { vans } = useOutletContext<Vans>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const typeFilter = searchParams.get("type");
+  const displayedVans = typeFilter
+    ? vans.filter(({ type }) => type === typeFilter)
+    : vans;
+  // color types
+  const typeColors: Record<string, string> = {
+    simple: "bg-[#E17654]",
+    rugged: "bg-[#115E59]",
+  };
+  // merging search params
+  function generateNewSearchParams(key: string, value: string | null) {
+    const sp = new URLSearchParams(searchParams);
+    if (value === null) {
+      sp.delete(key);
+    } else {
+      sp.set(key, value);
+    }
+    return `?${sp.toString()}`;
+  }
+  // function handleFilterChange(key: string, value: string | null) {
+  //   setSearchParams((prevParams) => {
+  //     value === null ? prevParams.delete(key) : prevParams.set(key, value);
+  //     return prevParams;
+  //   });
+  // }
+  if (loading) return <h1 className="bg-[#FFF7ED] px-6 font-bold text-[32px]" >Loading...</h1>
+  if (error) return <h1 className="bg-[#FFF7ED] px-6 font-bold text-[32px]" >There was an error: {error.message}</h1>
   return (
     <div className="bg-[#FFF7ED] py-10 px-6">
       <h1 className="font-bold text-[32px]">Explore our van options</h1>
       <div id="select" className="w-4/5 mt-6 flex justify-between">
-        <div className="bg-[#FFEAD0] py-1.5 px-3">Simple</div>
-        <div className="bg-[#FFEAD0] py-1.5 px-3">Luxury</div>
-        <div className="bg-[#FFEAD0] py-1.5 px-3">Rugged</div>
-        <div className="py-1.5 px-3">
-          <a href="#" className="hover:underline">
+        <Link
+          to={generateNewSearchParams("type", "simple")}
+          className={`${
+            typeFilter === "simple" ? "bg-[#E17654] text-white" : "bg-[#FFEAD0]"
+          }  py-1.5 px-3 rounded-[5px] hover:bg-[#E17654] hover:text-white cursor-pointer`}
+        >
+          Simple
+        </Link>
+        <Link
+          to={generateNewSearchParams("type", "luxury")}
+          className={`${
+            typeFilter === "luxury" ? "bg-[#161616] text-white" : "bg-[#FFEAD0]"
+          } py-1.5 px-3 rounded-[5px] hover:bg-[#161616] hover:text-white cursor-pointer`}
+        >
+          Luxury
+        </Link>
+        <Link
+          to={generateNewSearchParams("type", "rugged")}
+          className={`${
+            typeFilter === "rugged" ? "text-white bg-[#115E59]" : "bg-[#FFEAD0]"
+          } py-1.5 px-3 rounded-[5px] hover:bg-[#115E59] hover:text-white cursor-pointer`}
+        >
+          Rugged
+        </Link>
+        <Link
+          to={generateNewSearchParams("type", null)}
+          className="py-1.5 px-3 hover:underline"
+        >
+          Clear filters
+        </Link>
+        {/* <button
+          onClick={() => handleFilterChange("type", "simple")}
+          className={`${
+            typeFilter === "simple" ? "bg-[#E17654] text-white" : "bg-[#FFEAD0]"
+          }  py-1.5 px-3 rounded-[5px] hover:bg-[#E17654] hover:text-white cursor-pointer`}
+        >
+          Simple
+        </button>
+        <button
+          onClick={() => handleFilterChange("type", "luxury")}
+          className={`${
+            typeFilter === "luxury" ? "bg-[#161616] text-white" : "bg-[#FFEAD0]"
+          } py-1.5 px-3 rounded-[5px] hover:bg-[#161616] hover:text-white cursor-pointer`}
+        >
+          Luxury
+        </button>
+        <button
+          onClick={() => handleFilterChange("type", "rugged")}
+          className={`${
+            typeFilter === "rugged" ? "text-white bg-[#115E59]" : "bg-[#FFEAD0]"
+          } py-1.5 px-3 rounded-[5px] hover:bg-[#115E59] hover:text-white cursor-pointer`}
+        >
+          Rugged
+        </button>
+        {typeFilter && (
+          <button
+            onClick={() => handleFilterChange("type", null)}
+            className="py-1.5 px-3 cursor-pointer hover:underline"
+          >
             Clear filters
-          </a>
-        </div>
+          </button>
+        )} */}
       </div>
       <div id="vans" className="mt-10 grid grid-cols-2 gap-x-10 gap-y-5">
-        {vans.map(({ id, name, price, imageUrl, type }) => {
+        {displayedVans.map(({ id, name, price, imageUrl, type }) => {
           return (
-            <VanDetails
+            <Link
               key={id}
-              id={id}
-              name={name}
-              price={price}
-              imageUrl={imageUrl}
-              type={type}
-            />
+              to={`${id}`}
+              state={{ search: `?${searchParams.toString()}`}}
+              aria-label={`View details for ${name} priced at $${price} per day`}
+            >
+              <div className="">
+                <img
+                  src={imageUrl}
+                  alt={`Image of ${name}`}
+                  className="rounded-xl"
+                />
+              </div>
+              <div className="font-semibold text-[20px] flex justify-between mt-3 mb-2">
+                <h1>{name}</h1>
+                <div>${price}/day</div>
+              </div>
+              <span
+                className={clsx(
+                  "py-1.5 px-4 text-white rounded-lg",
+                  typeColors[type] || "bg-[#161616]"
+                )}
+              >
+                {type}
+              </span>
+            </Link>
           );
         })}
       </div>
@@ -46,32 +158,3 @@ const { vans } = useOutletContext<Props>();
 };
 
 export default Vans;
-
-const VanDetails = ({ id, name, price, imageUrl, type }: Van) => {
-  const typeColors: Record<string, string> = {
-    simple: "bg-[#E17654]",
-    rugged: "bg-[#115E59]",
-  };
-  return (
-    <Link
-      to={`/vans/${id}`}
-      aria-label={`View details for ${name} priced at $${price} per day`}
-    >
-      <div className="">
-        <img src={imageUrl} alt={`Image of ${name}`} className="rounded-xl" />
-      </div>
-      <div className="font-semibold text-[20px] flex justify-between mt-3 mb-2">
-        <h1>{name}</h1>
-        <div>${price}/day</div>
-      </div>
-      <span
-        className={clsx(
-          "py-1.5 px-4 text-white rounded-lg",
-          typeColors[type] || "bg-[#161616]"
-        )}
-      >
-        {type}
-      </span>
-    </Link>
-  );
-};

@@ -15,6 +15,8 @@ import HostVanDetailsLayout from "./components/HostVanDetailsLayout.tsx";
 import Details from "./pages/Hosts/HostVans/Details/Details.tsx";
 import Pricing from "./pages/Hosts/HostVans/Pricing/Pricing.tsx";
 import Photos from "./pages/Hosts/HostVans/Photos/Photos.tsx";
+import CatchAll from "./pages/CatchAll.tsx";
+import { getVans } from "../api";
 
 interface Van {
   id: string;
@@ -25,14 +27,29 @@ interface Van {
   type: string;
 }
 
+interface Error {
+  message: string;
+  statusText: string;
+  status: number;
+}
+
 function App() {
   const [vans, setVans] = useState<Van[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   useEffect(() => {
-    fetch("/api/vans")
-      .then((res) => res.json())
-      .then((data) => setVans(data.vans))
-      .then((err) => console.log(err))
-      .catch((err) => console.log(err));
+    async function loadVans() {
+      setLoading(true);
+      try {
+        const data = await getVans();
+        setVans(data);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadVans();
   }, []);
   return (
     <div className="w-[40%] mx-auto">
@@ -40,7 +57,10 @@ function App() {
         <Route path="/" element={<Layout vans={vans} />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
-          <Route path="vans" element={<Vans />} />
+          <Route
+            path="vans"
+            element={<Vans loading={loading} error={error} />}
+          />
           <Route path="vans/:id" element={<VanDetails />} />
           <Route path="host" element={<HostLayout />}>
             <Route index element={<Dashboard />} />
@@ -53,6 +73,7 @@ function App() {
             </Route>
             <Route path="reviews" element={<Reviews />} />
           </Route>
+          <Route path="*" element={<CatchAll />} />
         </Route>
       </Routes>
     </div>
