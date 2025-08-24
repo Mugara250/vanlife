@@ -1,5 +1,5 @@
+import { UserCircle2Icon } from "lucide-react";
 import { NavLink } from "react-router-dom";
-
 const Header = () => {
   return (
     <>
@@ -37,6 +37,9 @@ const Header = () => {
             to="vans"
           >
             Vans
+          </NavLink>
+          <NavLink to="login">
+            <UserCircle2Icon />
           </NavLink>
         </nav>
       </header>

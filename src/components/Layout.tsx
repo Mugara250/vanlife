@@ -1,6 +1,7 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLoaderData } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import { getVans } from "../../api";
 
 interface Van {
   id: string;
@@ -14,7 +15,12 @@ interface Van {
 interface Props {
   vans: Van[];
 }
-const Layout = ({ vans }: Props) => {
+export function loader() {
+  return getVans();
+}
+
+const Layout = () => {
+  const vans = useLoaderData<Props>();
   return (
     <>
       <Header />
