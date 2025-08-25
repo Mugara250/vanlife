@@ -17,8 +17,8 @@ const Photos = () => {
   return (
     <>
       {currentVan
-        .map(({ imageUrl, name }) => (
-          <div className="w-[103px] h-[101.55511474609375px]">
+        .map(({ id, imageUrl, name }) => (
+          <div key={id} className="w-[103px] h-[101.55511474609375px]">
             <img src={imageUrl} alt={`Image of ${name}`} />
           </div>
         ))}

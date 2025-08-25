@@ -33,8 +33,8 @@ const HostVanDetailsLayout = () => {
         &larr; Back to all vans
       </Link>
       <div className="bg-white mt-8 px-6 py-6 rounded-[6px]">
-        {currentVan.map(({ imageUrl, name, type, price }) => (
-          <div className="flex gap-x-5">
+        {currentVan.map(({id, imageUrl, name, type, price }) => (
+          <div key={id} className="flex gap-x-5">
             <div className="w-[160.14981079101562px] h-[157.90322875976562px]">
               <img
                 src={imageUrl}

@@ -1,5 +1,10 @@
-import { UserCircle2Icon } from "lucide-react";
+import { LogOutIcon, UserCircle2Icon } from "lucide-react";
 import { NavLink } from "react-router-dom";
+
+function fakeLogOut() {
+  localStorage.removeItem("loggedIn");
+}
+
 const Header = () => {
   return (
     <>
@@ -7,7 +12,7 @@ const Header = () => {
         <NavLink to="/" className="font-extrabold text-3xl">
           #VANLIFE
         </NavLink>
-        <nav className="text-base flex gap-x-4">
+        <nav className="text-base flex justify-center items-center gap-x-4">
           <NavLink
             className={({ isActive }) =>
               isActive
@@ -41,6 +46,9 @@ const Header = () => {
           <NavLink to="login">
             <UserCircle2Icon />
           </NavLink>
+          <button className="cursor-pointer" onClick={fakeLogOut}>
+            <LogOutIcon />
+          </button>
         </nav>
       </header>
     </>
