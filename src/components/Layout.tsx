@@ -15,16 +15,12 @@ interface Van {
 interface Props {
   vans: Van[];
 }
-export function loader() {
-  return getVans();
-}
 
 const Layout = () => {
-  const vans = useLoaderData<Props>();
   return (
     <>
       <Header />
-      <Outlet context={{vans}} />
+      <Outlet />
       <Footer />
     </>
   );

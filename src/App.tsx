@@ -21,16 +21,16 @@ import Pricing from "./pages/Hosts/HostVans/Pricing/Pricing.tsx";
 import Photos from "./pages/Hosts/HostVans/Photos/Photos.tsx";
 import CatchAll from "./pages/CatchAll.tsx";
 import { loader as vansLoader } from "./pages/Vans/Vans.tsx";
+import { loader as vanDetailsLoader } from "./pages/Vans/VanDetails.tsx";
 import Error from "./components/Error.tsx";
 import Login from "./pages/Login.tsx";
-import { loader as layoutLoader } from "./components/Layout";
-import {requireAuth} from "../utils.ts";
+import { requireAuth } from "../utils.ts";
 import { loader as loginLoader, action as loginAction } from "./pages/Login";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Layout />} loader={layoutLoader}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
         <Route
@@ -39,20 +39,68 @@ function App() {
           loader={vansLoader}
           errorElement={<Error />}
         />
-        <Route path="vans/:id" element={<VanDetails />} />
-        <Route path="host" element={<HostLayout />} loader={async ({request}) => await requireAuth(request)}>
-          <Route index element={<Dashboard />} loader={async ({request}) => await requireAuth(request)} />
-          <Route path="income" element={<Income />} loader={async ({request}) => await requireAuth(request)} />
-          <Route path="vans" element={<HostVans />} loader={async ({request}) => await requireAuth(request)}/>
-          <Route path="vans/:id" element={<HostVanDetailsLayout />} loader={async ({request}) => await requireAuth(request)}>
-            <Route index element={<Details />} loader={async ({request}) => await requireAuth(request)} />
-            <Route path="pricing" element={<Pricing />} loader={async ({request}) => await requireAuth(request)} />
-            <Route path="photos" element={<Photos />} loader={async ({request}) => await requireAuth(request)} />
+        <Route
+          path="vans/:id"
+          element={<VanDetails />}
+          loader={vanDetailsLoader}
+          errorElement={<Error />}
+        />
+        <Route
+          path="host"
+          element={<HostLayout />}
+          loader={async ({ request }) => await requireAuth(request)}
+        >
+          <Route
+            index
+            element={<Dashboard />}
+            loader={async ({ request }) => await requireAuth(request)}
+          />
+          <Route
+            path="income"
+            element={<Income />}
+            loader={async ({ request }) => await requireAuth(request)}
+          />
+          <Route
+            path="vans"
+            element={<HostVans />}
+            loader={async ({ request }) => await requireAuth(request)}
+            errorElement={<Error />}
+          />
+          <Route
+            path="vans/:id"
+            element={<HostVanDetailsLayout />}
+            loader={async ({ request }) => await requireAuth(request)}
+            errorElement={<Error />}
+          >
+            <Route
+              index
+              element={<Details />}
+              loader={async ({ request }) => await requireAuth(request)}
+            />
+            <Route
+              path="pricing"
+              element={<Pricing />}
+              loader={async ({ request }) => await requireAuth(request)}
+            />
+            <Route
+              path="photos"
+              element={<Photos />}
+              loader={async ({ request }) => await requireAuth(request)}
+            />
           </Route>
-          <Route path="reviews" element={<Reviews />} loader={async ({request}) => await requireAuth(request)}/>
+          <Route
+            path="reviews"
+            element={<Reviews />}
+            loader={async ({ request }) => await requireAuth(request)}
+          />
         </Route>
 
-        <Route path="login" element={<Login />} loader={loginLoader} action={loginAction} />
+        <Route
+          path="login"
+          element={<Login />}
+          loader={loginLoader}
+          action={loginAction}
+        />
         <Route path="*" element={<CatchAll />} />
       </Route>
     )
