@@ -1,4 +1,6 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
+import { getHostVans } from "../../../../api";
+import { requireAuth } from "../../../../utils";
 
 interface Van {
   id: string;
@@ -9,17 +11,18 @@ interface Van {
   type: string;
 }
 
-interface Props {
-  vans: Van[];
+export async function loader({request}: LoaderFunctionArgs) {
+  await requireAuth(request);
+  const vans = await getHostVans();
+  return vans;
 }
 
 const HostVans = () => {
-  const {vans} = useOutletContext<Props>();
+  const vans = useLoaderData() as Van[];
   return (
     <div className="bg-[#FFF7ED] px-6 pt-4 pb-10">
       <h1 className="text-[32px] font-bold">Your listed vans</h1>
       {vans
-        .filter(({id}) => +id < 4)
         .map(({id, imageUrl, name, price}) => (
           <Link key={id} to={`/host/vans/${id}`}>
             <div className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg">

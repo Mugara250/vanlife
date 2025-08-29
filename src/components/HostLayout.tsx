@@ -1,17 +1,6 @@
-import { NavLink, Outlet, useOutletContext } from "react-router-dom";
-interface Van {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  imageUrl: string;
-  type: string;
-}
-interface Props {
-  vans: Van[];
-}
+import { NavLink, Outlet } from "react-router-dom";
+
 const HostLayout = () => {
-  const {vans} = useOutletContext<Props>();
   return (
     <>
       <nav className="py-6 px-6 bg-[#FFF7ED] flex gap-x-6">
@@ -59,7 +48,7 @@ const HostLayout = () => {
           Reviews
         </NavLink>
       </nav>
-      <Outlet context={{vans}}/>
+      <Outlet/>
     </>
   );
 };

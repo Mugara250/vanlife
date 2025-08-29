@@ -26,6 +26,9 @@ import Error from "./components/Error.tsx";
 import Login from "./pages/Login.tsx";
 import { requireAuth } from "../utils.ts";
 import { loader as loginLoader, action as loginAction } from "./pages/Login";
+import { loader as dashboardLoader } from "./pages/Hosts/Dashboard/Dashboard.tsx";
+import { loader as hostVansLoader} from "./pages/Hosts/HostVans/HostVans.tsx";
+import { loader as hostVansDetailLoader } from "./pages/Hosts/HostVans/HostVans.tsx";
 
 function App() {
   const router = createBrowserRouter(
@@ -53,7 +56,8 @@ function App() {
           <Route
             index
             element={<Dashboard />}
-            loader={async ({ request }) => await requireAuth(request)}
+            loader={dashboardLoader}
+            errorElement={<Error />}
           />
           <Route
             path="income"
@@ -63,13 +67,13 @@ function App() {
           <Route
             path="vans"
             element={<HostVans />}
-            loader={async ({ request }) => await requireAuth(request)}
+            loader={hostVansLoader}
             errorElement={<Error />}
           />
           <Route
             path="vans/:id"
             element={<HostVanDetailsLayout />}
-            loader={async ({ request }) => await requireAuth(request)}
+            loader={hostVansDetailLoader}
             errorElement={<Error />}
           >
             <Route

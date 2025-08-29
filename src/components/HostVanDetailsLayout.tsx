@@ -2,9 +2,12 @@ import {
   Link,
   NavLink,
   Outlet,
-  useOutletContext,
+  useLoaderData,
   useParams,
+  type LoaderFunctionArgs,
 } from "react-router-dom";
+import { getHostVans } from "../../api";
+import { requireAuth } from "../../utils";
 
 interface Van {
   id: string;
@@ -15,14 +18,18 @@ interface Van {
   type: string;
 }
 
-interface Props {
-  vans: Van[];
+export async function loader({params, request}: LoaderFunctionArgs) {
+  await requireAuth(request);
+  const vans = await getHostVans(params.id);
+  return vans; 
 }
 
 const HostVanDetailsLayout = () => {
-  const { vans } = useOutletContext<Props>();
-  const { id: param } = useParams();
-  const currentVan: Van[] = vans.filter(({ id }) => id === param);
+  const vans = useLoaderData() as Van[];
+  const {id: param} = useParams();
+  console.log()
+  const currentVan = vans.filter(({id}) => id === param )
+  console.log(currentVan);
   return (
     <div className="bg-[#FFF7ED] px-6 py-10">
       <Link

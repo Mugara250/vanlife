@@ -26,8 +26,8 @@ export async function getVans(id?: string) {
 //   return data.vans;
 // }
 export async function getHostVans(id?: string) {
-  const url = id ? `/api/host/vans/${id}` : "/api/host/vans"
-  const res = await fetch("/api/vans");
+  const url = id !== undefined ? `/api/host/vans/${id}` : "/api/host/vans"
+  const res = await fetch(url);
   if (!res.ok) {
     throw {
       message: "Failed to fetch vans",
@@ -36,7 +36,7 @@ export async function getHostVans(id?: string) {
     };
   }
   const data = await res.json();
-  return data.vans;
+  return id ? data : data.vans;
 }
 
 export async function loginUser(creds: any) {

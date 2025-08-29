@@ -1,4 +1,6 @@
-import { useOutletContext } from "react-router-dom";
+import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
+import { getHostVans } from "../../../../api";
+import { requireAuth } from "../../../../utils";
 
 interface Van {
   id: string;
@@ -8,11 +10,15 @@ interface Van {
   imageUrl: string;
   type: string;
 }
-interface Props {
-  vans: Van[];
+
+export async function loader({request}: LoaderFunctionArgs) {
+  await requireAuth(request);
+  const vans = await getHostVans();
+  return vans;
 }
+
 const Dashboard = () => {
-  const {vans} = useOutletContext<Props>();
+  const vans = useLoaderData() as Van[];
   return (
     <>
       <div className="bg-[#FFEAD0] px-6 py-5">
@@ -40,24 +46,28 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold">Your listed vans</h1>
           <h1 className="text-base">View all</h1>
         </div>
-        {vans.filter(({id}) => +id < 4).map(({id, imageUrl, name, price}) => (
-          <div key={id} className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg">
-            <div className="flex gap-x-4">
-              <img
-                src={imageUrl}
-                alt={`Image of ${name}`}
-                className="w-[65.88px] h-[65.88px] rounded-sm"
-              />
-              <div className="text-xl">
-                <h1 className="font-semibold">{name}</h1>
-                <span className="text-[#4D4D4D]">${price}/day</span>
+        {vans
+          .map(({ id, imageUrl, name, price }) => (
+            <div
+              key={id}
+              className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg"
+            >
+              <div className="flex gap-x-4">
+                <img
+                  src={imageUrl}
+                  alt={`Image of ${name}`}
+                  className="w-[65.88px] h-[65.88px] rounded-sm"
+                />
+                <div className="text-xl">
+                  <h1 className="font-semibold">{name}</h1>
+                  <span className="text-[#4D4D4D]">${price}/day</span>
+                </div>
+              </div>
+              <div className="flex justify-center items-center">
+                <h1 className="font-medium">Edit</h1>
               </div>
             </div>
-            <div className="flex justify-center items-center">
-              <h1 className="font-medium">Edit</h1>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </>
   );

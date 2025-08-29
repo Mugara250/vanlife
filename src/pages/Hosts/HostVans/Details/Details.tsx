@@ -12,8 +12,9 @@ interface Van {
 interface Props {
   currentVan: Van[];
 }
+
 const Details = () => {
-  const { currentVan } = useOutletContext<Props>();
+  const { currentVan} = useOutletContext<Props>();
   return (
     <>
       {currentVan
