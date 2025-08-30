@@ -1,6 +1,11 @@
-import { useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
+import {
+  Await,
+  useLoaderData,
+  type LoaderFunctionArgs,
+} from "react-router-dom";
 import { getHostVans } from "../../../../api";
 import { requireAuth } from "../../../../utils";
+import { Suspense } from "react";
 
 interface Van {
   id: string;
@@ -11,14 +16,45 @@ interface Van {
   type: string;
 }
 
-export async function loader({request}: LoaderFunctionArgs) {
+interface Props {
+  vansData: Promise<Van[]>;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
   await requireAuth(request);
-  const vans = await getHostVans();
-  return vans;
+  return { vansData: getHostVans() };
 }
 
 const Dashboard = () => {
-  const vans = useLoaderData() as Van[];
+  const { vansData }: Props = useLoaderData();
+  const RenderListedVans = (vans: Van[]) => {
+    return (
+      <>
+        {vans.map(({ id, imageUrl, name, price }) => (
+          <div
+            key={id}
+            className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg"
+          >
+            <div className="flex gap-x-4">
+              <img
+                src={imageUrl}
+                alt={`Image of ${name}`}
+                className="w-[65.88px] h-[65.88px] rounded-sm"
+              />
+              <div className="text-xl">
+                <h1 className="font-semibold">{name}</h1>
+                <span className="text-[#4D4D4D]">${price}/day</span>
+              </div>
+            </div>
+            <div className="flex justify-center items-center">
+              <h1 className="font-medium">Edit</h1>
+            </div>
+          </div>
+        ))}
+      </>
+    );
+  };
+
   return (
     <>
       <div className="bg-[#FFEAD0] px-6 py-5">
@@ -46,28 +82,15 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold">Your listed vans</h1>
           <h1 className="text-base">View all</h1>
         </div>
-        {vans
-          .map(({ id, imageUrl, name, price }) => (
-            <div
-              key={id}
-              className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg"
-            >
-              <div className="flex gap-x-4">
-                <img
-                  src={imageUrl}
-                  alt={`Image of ${name}`}
-                  className="w-[65.88px] h-[65.88px] rounded-sm"
-                />
-                <div className="text-xl">
-                  <h1 className="font-semibold">{name}</h1>
-                  <span className="text-[#4D4D4D]">${price}/day</span>
-                </div>
-              </div>
-              <div className="flex justify-center items-center">
-                <h1 className="font-medium">Edit</h1>
-              </div>
-            </div>
-          ))}
+        <Suspense
+          fallback={
+            <h1 className="font-bold text-[32px]">Loading vans ....</h1>
+          }
+        >
+          <Await resolve={vansData}>
+            {RenderListedVans}
+          </Await>
+        </Suspense>
       </div>
     </>
   );

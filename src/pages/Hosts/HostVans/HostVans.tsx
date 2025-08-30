@@ -1,6 +1,12 @@
-import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
+import {
+  Await,
+  Link,
+  useLoaderData,
+  type LoaderFunctionArgs,
+} from "react-router-dom";
 import { getHostVans } from "../../../../api";
 import { requireAuth } from "../../../../utils";
+import { Suspense } from "react";
 
 interface Van {
   id: string;
@@ -11,19 +17,22 @@ interface Van {
   type: string;
 }
 
-export async function loader({request}: LoaderFunctionArgs) {
+interface Props {
+  vansData: Promise<Van[]>;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
   await requireAuth(request);
-  const vans = await getHostVans();
-  return vans;
+  return { vansData: getHostVans() };
 }
 
 const HostVans = () => {
-  const vans = useLoaderData() as Van[];
-  return (
-    <div className="bg-[#FFF7ED] px-6 pt-4 pb-10">
-      <h1 className="text-[32px] font-bold">Your listed vans</h1>
-      {vans
-        .map(({id, imageUrl, name, price}) => (
+  const { vansData }: Props = useLoaderData();
+
+  const RenderHostVans = (vans: Van[]) => {
+    return (
+      <>
+        {vans.map(({ id, imageUrl, name, price }) => (
           <Link key={id} to={`/host/vans/${id}`}>
             <div className="bg-white py-5 px-6 mt-6 flex justify-between rounded-lg">
               <div className="flex gap-x-4">
@@ -40,6 +49,19 @@ const HostVans = () => {
             </div>
           </Link>
         ))}
+      </>
+    );
+  };
+  return (
+    <div className="bg-[#FFF7ED] px-6 pt-4 pb-10">
+      <h1 className="text-[32px] font-bold">Your listed vans</h1>
+      <Suspense fallback={
+            <h1 className="font-bold text-[32px]">Loading vans ....</h1>
+          }>
+        <Await resolve={vansData}>
+          {RenderHostVans}
+        </Await>
+      </Suspense>
     </div>
   );
 };

@@ -46,7 +46,7 @@ const Vans = () => {
   //   });
   // }
 
-  const renderVans = (vans: Van[]) => {
+  const RenderVans = (vans: Van[]) => {
     const typeFilter = searchParams.get("type");
     const displayedVans = typeFilter
       ? vans.filter(({ type }) => type === typeFilter)
@@ -168,7 +168,7 @@ const Vans = () => {
       <Suspense
         fallback={<h1 className="font-bold text-[32px]">Loading vans ...</h1>}
       >
-        <Await resolve={vansData}>{renderVans}</Await>
+        <Await resolve={vansData}>{RenderVans}</Await>
       </Suspense>
     </div>
   );

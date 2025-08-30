@@ -28,7 +28,7 @@ import { requireAuth } from "../utils.ts";
 import { loader as loginLoader, action as loginAction } from "./pages/Login";
 import { loader as dashboardLoader } from "./pages/Hosts/Dashboard/Dashboard.tsx";
 import { loader as hostVansLoader} from "./pages/Hosts/HostVans/HostVans.tsx";
-import { loader as hostVansDetailLoader } from "./pages/Hosts/HostVans/HostVans.tsx";
+import { loader as hostVansDetailLoader } from "./components/HostVanDetailsLayout.tsx";
 
 function App() {
   const router = createBrowserRouter(

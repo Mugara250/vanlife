@@ -20,7 +20,7 @@ const Error = () => {
   console.log(error);
   return (
     <div className="bg-[#FFF7ED] py-10 px-6">
-      <h1 className="font-bold text-[32px]">{isErrorProps(error) && error.message}</h1>
+      <h1 className="font-bold text-[32px]">{isErrorProps(error) ? error.message : "Other errors have occurred"}</h1>
     </div>
   );
 };

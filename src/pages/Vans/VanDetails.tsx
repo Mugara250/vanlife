@@ -3,7 +3,6 @@ import {
   Link,
   useLoaderData,
   useLocation,
-  useParams,
   type LoaderFunctionArgs,
 } from "react-router-dom";
 import clsx from "clsx";
